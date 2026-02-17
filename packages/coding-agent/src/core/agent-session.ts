@@ -1932,6 +1932,12 @@ export class AgentSession {
 				},
 				getThinkingLevel: () => this.thinkingLevel,
 				setThinkingLevel: (level) => this.setThinkingLevel(level),
+				fork: async (entryId) => {
+					return runner.fork(entryId);
+				},
+				navigateTree: async (targetId, options) => {
+					return runner.navigateTree(targetId, options);
+				},
 			},
 			{
 				getModel: () => this.model,

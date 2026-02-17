@@ -11,8 +11,6 @@ export {
 } from "./loader.js";
 export type {
 	ExtensionErrorListener,
-	ForkHandler,
-	NavigateTreeHandler,
 	NewSessionHandler,
 	ShutdownHandler,
 	SwitchSessionHandler,
@@ -67,6 +65,7 @@ export type {
 	ExtensionWidgetOptions,
 	FindToolCallEvent,
 	FindToolResultEvent,
+	ForkHandler,
 	GetActiveToolsHandler,
 	GetAllToolsHandler,
 	GetCommandsHandler,
@@ -90,6 +89,7 @@ export type {
 	MessageUpdateEvent,
 	ModelSelectEvent,
 	ModelSelectSource,
+	NavigateTreeHandler,
 	// Provider Registration
 	ProviderConfig,
 	ProviderModelConfig,

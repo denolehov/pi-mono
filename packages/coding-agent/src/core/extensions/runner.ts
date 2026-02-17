@@ -29,10 +29,12 @@ import type {
 	ExtensionRuntime,
 	ExtensionShortcut,
 	ExtensionUIContext,
+	ForkHandler,
 	InputEvent,
 	InputEventResult,
 	InputSource,
 	MessageRenderer,
+	NavigateTreeHandler,
 	RegisteredCommand,
 	RegisteredTool,
 	ResourcesDiscoverEvent,
@@ -138,13 +140,6 @@ export type NewSessionHandler = (options?: {
 	setup?: (sessionManager: SessionManager) => Promise<void>;
 }) => Promise<{ cancelled: boolean }>;
 
-export type ForkHandler = (entryId: string) => Promise<{ cancelled: boolean }>;
-
-export type NavigateTreeHandler = (
-	targetId: string,
-	options?: { summarize?: boolean; customInstructions?: string; replaceInstructions?: boolean; label?: string },
-) => Promise<{ cancelled: boolean }>;
-
 export type SwitchSessionHandler = (sessionPath: string) => Promise<{ cancelled: boolean }>;
 
 export type ReloadHandler = () => Promise<void>;
@@ -248,6 +243,8 @@ export class ExtensionRunner {
 		this.runtime.setModel = actions.setModel;
 		this.runtime.getThinkingLevel = actions.getThinkingLevel;
 		this.runtime.setThinkingLevel = actions.setThinkingLevel;
+		this.runtime.fork = actions.fork;
+		this.runtime.navigateTree = actions.navigateTree;
 
 		// Context actions (required)
 		this.getModel = contextActions.getModel;
@@ -509,6 +506,17 @@ export class ExtensionRunner {
 			switchSession: (sessionPath) => this.switchSessionHandler(sessionPath),
 			reload: () => this.reloadHandler(),
 		};
+	}
+
+	async fork(entryId: string): Promise<{ cancelled: boolean }> {
+		return this.forkHandler(entryId);
+	}
+
+	async navigateTree(
+		targetId: string,
+		options?: { summarize?: boolean; customInstructions?: string; replaceInstructions?: boolean; label?: string },
+	): Promise<{ cancelled: boolean }> {
+		return this.navigateTreeHandler(targetId, options);
 	}
 
 	private isSessionBeforeEvent(event: RunnerEmitEvent): event is SessionBeforeEvent {

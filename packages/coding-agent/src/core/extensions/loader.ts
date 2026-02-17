@@ -123,6 +123,8 @@ export function createExtensionRuntime(): ExtensionRuntime {
 		setModel: () => Promise.reject(new Error("Extension runtime not initialized")),
 		getThinkingLevel: notInitialized,
 		setThinkingLevel: notInitialized,
+		fork: () => Promise.reject(new Error("Extension runtime not initialized")),
+		navigateTree: () => Promise.reject(new Error("Extension runtime not initialized")),
 		flagValues: new Map(),
 		pendingProviderRegistrations: [],
 	};
@@ -243,6 +245,14 @@ function createExtensionAPI(
 
 		setThinkingLevel(level) {
 			runtime.setThinkingLevel(level);
+		},
+
+		fork(entryId: string) {
+			return runtime.fork(entryId);
+		},
+
+		navigateTree(targetId: string, options?) {
+			return runtime.navigateTree(targetId, options);
 		},
 
 		registerProvider(name: string, config: ProviderConfig) {

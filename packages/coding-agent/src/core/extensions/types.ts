@@ -1060,6 +1060,19 @@ export interface ExtensionAPI {
 	setThinkingLevel(level: ThinkingLevel): void;
 
 	// =========================================================================
+	// Session Navigation
+	// =========================================================================
+
+	/** Fork from a specific entry, creating a new session branch. */
+	fork(entryId: string): Promise<{ cancelled: boolean }>;
+
+	/** Navigate to a different point in the session tree. */
+	navigateTree(
+		targetId: string,
+		options?: { summarize?: boolean; customInstructions?: string; replaceInstructions?: boolean; label?: string },
+	): Promise<{ cancelled: boolean }>;
+
+	// =========================================================================
 	// Provider Registration
 	// =========================================================================
 
@@ -1239,6 +1252,13 @@ export type SetThinkingLevelHandler = (level: ThinkingLevel) => void;
 
 export type SetLabelHandler = (entryId: string, label: string | undefined) => void;
 
+export type ForkHandler = (entryId: string) => Promise<{ cancelled: boolean }>;
+
+export type NavigateTreeHandler = (
+	targetId: string,
+	options?: { summarize?: boolean; customInstructions?: string; replaceInstructions?: boolean; label?: string },
+) => Promise<{ cancelled: boolean }>;
+
 /**
  * Shared state created by loader, used during registration and runtime.
  * Contains flag values (defaults set during registration, CLI values set after).
@@ -1267,6 +1287,8 @@ export interface ExtensionActions {
 	setModel: SetModelHandler;
 	getThinkingLevel: GetThinkingLevelHandler;
 	setThinkingLevel: SetThinkingLevelHandler;
+	fork: ForkHandler;
+	navigateTree: NavigateTreeHandler;
 }
 
 /**
